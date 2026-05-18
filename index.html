@@ -1,1361 +1,726 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <title>OccMed LocalStorage Demo (Multi-Page)</title>
-  <style>
-    body { 
-      font-family: Tahoma, Arial, sans-serif; 
-      margin: 0;
-      padding: 20px;
-      background-color: #f5f5f5;
-    }
-    
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    /* Navigation Tabs */
-    .nav-tabs {
-      display: flex;
-      border-bottom: 2px solid #4CAF50;
-      margin-bottom: 20px;
-      gap: 5px;
-    }
-    
-    .nav-tab {
-      padding: 12px 24px;
-      background-color: #e0e0e0;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      transition: all 0.3s;
-      border-radius: 5px 5px 0 0;
-    }
-    
-    .nav-tab:hover {
-      background-color: #d0d0d0;
-    }
-    
-    .nav-tab.active {
-      background-color: #4CAF50;
-      color: white;
-      font-weight: bold;
-    }
-    
-    /* Pages */
-    .page {
-      display: none;
-    }
-    
-    .page.active {
-      display: block;
-    }
-    
-    /* Form Elements */
-    label { 
-      display: inline-block; 
-      width: 200px; 
-      margin-top: 4px; 
-      vertical-align: top; 
-      font-weight: 500;
-    }
-    
-    input[type="text"], 
-    input[type="date"], 
-    input[type="number"], 
-    select, 
-    textarea {
-      margin-top: 4px;
-      margin-bottom: 8px;
-      padding: 8px;
-      width: 300px;
-      box-sizing: border-box;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-    }
-    
-    input[type="number"] { width: 80px; }
-    textarea { width: 400px; }
-    
-    h2 { 
-      margin-top: 16px; 
-      margin-bottom: 16px;
-      color: #333;
-      border-bottom: 2px solid #4CAF50;
-      padding-bottom: 8px;
-    }
-    
-    h3 { 
-      margin-top: 16px; 
-      margin-bottom: 12px;
-      color: #555;
-    }
-    
-    h4 { 
-      margin-top: 12px; 
-      margin-bottom: 8px;
-      color: #666;
-    }
-    
-    /* Tables */
-    table { 
-      border-collapse: collapse; 
-      width: 100%; 
-      margin-top: 10px;
-      background-color: white;
-    }
-    
-    th, td { 
-      border: 1px solid #ddd; 
-      padding: 8px 12px; 
-      font-size: 14px;
-      text-align: left;
-    }
-    
-    th { 
-      background-color: #4CAF50;
-      color: white;
-      font-weight: bold;
-    }
-    
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-    
-    tr:hover {
-      background-color: #f0f0f0;
-    }
-    
-    /* Buttons */
-    .btn { 
-      padding: 10px 20px; 
-      margin-right: 8px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.3s;
-    }
-    
-    .btn-primary {
-      background-color: #4CAF50;
-      color: white;
-    }
-    
-    .btn-primary:hover {
-      background-color: #45a049;
-    }
-    
-    .btn-secondary {
-      background-color: #2196F3;
-      color: white;
-    }
-    
-    .btn-secondary:hover {
-      background-color: #0b7dda;
-    }
-    
-    .btn-danger {
-      background-color: #f44336;
-      color: white;
-    }
-    
-    .btn-danger:hover {
-      background-color: #da190b;
-    }
-    
-    .btn-warning {
-      background-color: #ff9800;
-      color: white;
-    }
-    
-    .btn-warning:hover {
-      background-color: #e68900;
-    }
-    
-    .btn-small {
-      padding: 5px 12px;
-      font-size: 13px;
-    }
-    
-    /* Service Block */
-    .service-block { 
-      border: 2px solid #4CAF50; 
-      padding: 15px; 
-      margin-bottom: 15px; 
-      background-color: #f9f9f9;
-      border-radius: 8px;
-    }
-    
-    .sub-section {
-      background-color: #fff;
-      border: 1px solid #ddd;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 5px;
-    }
-    
-    /* Hearing Grid */
-    .hearing-grid {
-      display: grid;
-      grid-template-columns: auto repeat(7, 80px);
-      gap: 5px;
-      margin: 10px 0;
-    }
-    
-    .hearing-grid > div {
-      padding: 5px;
-      text-align: center;
-    }
-    
-    .hearing-header {
-      font-weight: bold;
-      background-color: #e8e8e8;
-      border-radius: 3px;
-    }
-    
-    /* Navigation Buttons */
-    .page-navigation {
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 2px solid #ddd;
-      display: flex;
-      justify-content: space-between;
-    }
-    
-    /* Search Section */
-    .search-section {
-      background-color: #f9f9f9;
-      padding: 15px;
-      border-radius: 5px;
-      margin-bottom: 20px;
-    }
-    
-    .search-section input,
-    .search-section select {
-      width: 300px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Environment Day Quiz Show</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #e8f5e9;
+            --panel-easy: #81c784;
+            --panel-med: #ffb74d;
+            --panel-hard: #e57373;
+            --primary-dark: #1b5e20;
+            --accent-blue: #0288d1;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: var(--bg-color);
+            background-image: url('https://www.transparenttextures.com/patterns/leaf.png');
+            color: #333;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: var(--primary-dark);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin-top: 30px;
+            font-size: 2.2rem;
+            text-align: center;
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 900px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        .login-box {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(27, 94, 32, 0.2);
+            text-align: center;
+            border: 3px solid var(--primary-dark);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        input[type="text"] {
+            padding: 15px;
+            width: 85%;
+            font-size: 1.2rem;
+            border-radius: 12px;
+            border: 2px solid var(--panel-easy);
+            background: #f1f8e9;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        button.btn-start {
+            background: var(--primary-dark);
+            color: var(--white);
+            font-weight: bold;
+            font-size: 1.3rem;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-family: 'Prompt', sans-serif;
+        }
+
+        button.btn-start:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            background: #2e7d32;
+        }
+
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            background: var(--primary-dark);
+            color: white;
+            padding: 20px 35px;
+            border-radius: 18px;
+            box-sizing: border-box;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .score-text {
+            color: #fbc02d;
+            font-weight: bold;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 100%;
+        }
+
+        .column-title {
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            padding: 15px 10px;
+            border-radius: 15px 15px 0 0;
+            background: rgba(255,255,255,0.85);
+            margin-bottom: 15px;
+        }
+
+        .panel {
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 0 rgba(0,0,0,0.1);
+            margin-bottom: 12px;
+            border: 2px solid rgba(0,0,0,0.05);
+        }
+
+        .panel.easy {
+            background: linear-gradient(135deg, #a5d6a7, #81c784);
+            color: #1b5e20;
+        }
+
+        .panel.med {
+            background: linear-gradient(135deg, #ffcc80, #ffb74d);
+            color: #e65100;
+        }
+
+        .panel.hard {
+            background: linear-gradient(135deg, #ef9a9a, #e57373);
+            color: #b71c1c;
+        }
+
+        .panel.disabled {
+            background: #cfd8dc !important;
+            color: #78909c !important;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: #ffffff;
+            padding: 35px;
+            border-radius: 30px;
+            width: 90%;
+            max-width: 550px;
+            text-align: center;
+            border: 6px solid var(--panel-easy);
+        }
+
+        .timer-box {
+            margin: 10px auto 20px auto;
+            background: #e8f5e9;
+            border: 2px solid var(--primary-dark);
+            color: var(--primary-dark);
+            font-weight: bold;
+            font-size: 1.4rem;
+            padding: 10px 20px;
+            border-radius: 50px;
+            width: fit-content;
+            min-width: 130px;
+        }
+
+        #timer.warning {
+            background: #ffebee;
+            color: #c62828;
+            border-color: #c62828;
+            animation: pulse 0.6s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.08); }
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .opt-btn {
+            background: #f1f8e9;
+            color: var(--primary-dark);
+            border: 2px solid var(--panel-easy);
+            padding: 16px;
+            font-size: 1.1rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Prompt', sans-serif;
+        }
+
+        .opt-btn:hover {
+            background: var(--panel-easy);
+            color: white;
+        }
+
+        .opt-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            font-weight: bold;
+        }
+
+        .result-avatar {
+            width: 190px;
+            height: auto;
+            max-width: 100%;
+            object-fit: contain;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            margin: 10px auto 18px auto;
+            background: transparent;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .result-avatar {
+                width: 150px;
+            }
+        }
+
+        .rank-box {
+            background: #f1f8e9;
+            border: 2px dashed #66bb6a;
+            border-radius: 18px;
+            padding: 16px;
+            margin: 10px 0 18px 0;
+        }
+
+        .rank-title {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 6px;
+        }
+
+        .rank-desc {
+            font-size: 1.05rem;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .staff-note {
+            margin-top: 14px;
+            padding: 14px 16px;
+            background: #fff8e1;
+            border: 2px solid #fbc02d;
+            border-radius: 14px;
+            color: #6d4c41;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .board {
+                grid-template-columns: 1fr;
+            }
+
+            .header-bar {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            h1 {
+                font-size: 1.7rem;
+            }
+
+            .result-avatar {
+                width: 130px;
+                height: auto;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<div class="container">
-  <h1 style="text-align: center; color: #4CAF50;">ระบบบันทึกข้อมูล OccMed</h1>
-  
-  <!-- Navigation Tabs -->
-  <div class="nav-tabs">
-    <button class="nav-tab active" onclick="showPage(1)">หน้า 1: ข้อมูลส่วนตัว</button>
-    <button class="nav-tab" onclick="showPage(2)">หน้า 2: ประเภทการรับบริการ</button>
-    <button class="nav-tab" onclick="showPage(3)">หน้า 3: ค้นหาและ Export</button>
-  </div>
+    <div id="loading">♻️ กำลังเตรียมข้อมูล...</div>
 
-  <form id="occmedForm">
-    
-    <!-- ========== หน้า 1: ข้อมูลส่วนตัว ========== -->
-    <div id="page1" class="page active">
-      <h2>ข้อมูลส่วนตัว</h2>
-      
-      <label for="hn">HN:</label>
-      <input type="text" id="hn" name="hn"><br>
+    <div class="screen active" id="screen-login">
+        <h1>🌍 ใครคือ Waste Master 🌿</h1>
 
-      <label for="patientName">ชื่อ-สกุล:</label>
-      <input type="text" id="patientName" name="patientName"><br>
+        <div class="login-box">
+            <div style="font-size: 4.5rem; margin-bottom: 10px;">🍃</div>
+            <h2 style="color: var(--primary-dark); margin-top:0;">ยินดีต้อนรับผู้เข้าแข่งขันทุกท่าน</h2>
+            <p>กรุณากรอกชื่อเพื่อเริ่มการแข่งขัน</p>
 
-      <label for="department">แผนกที่ทำงาน:</label>
-      <input type="text" id="department" name="department"><br>
+            <input type="text" id="player-name" placeholder="ชื่อของคุณ..." autocomplete="off">
+            <br>
 
-      <label for="jobTitle">Job title:</label>
-      <input type="text" id="jobTitle" name="jobTitle"><br>
+            <button class="btn-start" onclick="startGame()">เริ่มเกม</button>
 
-      <label for="jobTask">Job task:</label>
-      <input type="text" id="jobTask" name="jobTask"><br>
-
-      <label for="visitDate">วันที่รับบริการ:</label>
-      <input type="date" id="visitDate" name="visitDate"><br>
-
-      <label for="visitType">รูปแบบการมาที่คลีนิค:</label>
-      <select id="visitType" name="visitType">
-        <option value="">-- เลือก --</option>
-        <option value="routine">ตรวจตามระบบ</option>
-        <option value="consult_internal">รับ consult จากแผนกอื่น</option>
-        <option value="consult_external">จากหน่วยงานภายนอกโรงพยาบาล</option>
-        <option value="other">อื่นๆ</option>
-      </select><br>
-
-      <div class="page-navigation">
-        <div></div>
-        <button type="button" class="btn btn-primary" onclick="showPage(2)">ถัดไป →</button>
-      </div>
+            <p style="color:#666; font-size:0.85rem; margin-top:15px;">
+                * คำอธิบาย: สามารถเลือกได้ว่าจะตอบคำถามระดับใด มี ยาก ปานกลาง และง่าย
+                โดยคะแนนจะสะสมไปเรื่อย ๆ หากตอบผิดหรือหมดเวลา 1 ข้อ เกมจะจบลงทันที!
+            </p>
+        </div>
     </div>
 
-    <!-- ========== หน้า 2: ประเภทการรับบริการ ========== -->
-    <div id="page2" class="page">
-      <h2>ประเภทของการรับบริการทางการตรวจ (เลือกได้สูงสุด 4 รายการ)</h2>
+    <div class="screen" id="screen-game">
+        <h1>🌱 เกมคัดแยกขยะพิชิตโลก 🌎</h1>
 
-      <div class="service-block">
-        <h3>ประเภทของการรับบริการทางการตรวจที่ 1</h3>
-        <select id="serviceType1" name="serviceType1" onchange="onServiceTypeChange(1)">
-          <option value="">-- เลือก --</option>
-          <option value="occ_health">A. การตรวจสุขภาพทางอาชีวเวชศาสตร์</option>
-          <option value="pre_employment">B. Pre-employment</option>
-          <option value="pre_placement">C. Pre-placement</option>
-          <option value="periodic">D. Periodic health checkup</option>
-          <option value="rtw">E. Return to work</option>
-          <option value="pre_retirement">F. Pre-retirement</option>
-          <option value="occ_disease">G. การวินิจฉัยโรคจากงาน</option>
-          <option value="impairment">H. การประเมินสูญเสีย</option>
-          <option value="disease_investigation">I. Disease Investigation</option>
-        </select>
-        <div id="serviceDetail1"></div>
-      </div>
-
-      <div class="service-block">
-        <h3>ประเภทของการรับบริการทางการตรวจที่ 2</h3>
-        <select id="serviceType2" name="serviceType2" onchange="onServiceTypeChange(2)">
-          <option value="">-- เลือก --</option>
-          <option value="occ_health">A. การตรวจสุขภาพทางอาชีวเวชศาสตร์</option>
-          <option value="pre_employment">B. Pre-employment</option>
-          <option value="pre_placement">C. Pre-placement</option>
-          <option value="periodic">D. Periodic health checkup</option>
-          <option value="rtw">E. Return to work</option>
-          <option value="pre_retirement">F. Pre-retirement</option>
-          <option value="occ_disease">G. การวินิจฉัยโรคจากงาน</option>
-          <option value="impairment">H. การประเมินสูญเสีย</option>
-          <option value="disease_investigation">I. Disease Investigation</option>
-        </select>
-        <div id="serviceDetail2"></div>
-      </div>
-
-      <div class="service-block">
-        <h3>ประเภทของการรับบริการทางการตรวจที่ 3</h3>
-        <select id="serviceType3" name="serviceType3" onchange="onServiceTypeChange(3)">
-          <option value="">-- เลือก --</option>
-          <option value="occ_health">A. การตรวจสุขภาพทางอาชีวเวชศาสตร์</option>
-          <option value="pre_employment">B. Pre-employment</option>
-          <option value="pre_placement">C. Pre-placement</option>
-          <option value="periodic">D. Periodic health checkup</option>
-          <option value="rtw">E. Return to work</option>
-          <option value="pre_retirement">F. Pre-retirement</option>
-          <option value="occ_disease">G. การวินิจฉัยโรคจากงาน</option>
-          <option value="impairment">H. การประเมินสูญเสีย</option>
-          <option value="disease_investigation">I. Disease Investigation</option>
-        </select>
-        <div id="serviceDetail3"></div>
-      </div>
-
-      <div class="service-block">
-        <h3>ประเภทของการรับบริการทางการตรวจที่ 4</h3>
-        <select id="serviceType4" name="serviceType4" onchange="onServiceTypeChange(4)">
-          <option value="">-- เลือก --</option>
-          <option value="occ_health">A. การตรวจสุขภาพทางอาชีวเวชศาสตร์</option>
-          <option value="pre_employment">B. Pre-employment</option>
-          <option value="pre_placement">C. Pre-placement</option>
-          <option value="periodic">D. Periodic health checkup</option>
-          <option value="rtw">E. Return to work</option>
-          <option value="pre_retirement">F. Pre-retirement</option>
-          <option value="occ_disease">G. การวินิจฉัยโรคจากงาน</option>
-          <option value="impairment">H. การประเมินสูญเสีย</option>
-          <option value="disease_investigation">I. Disease Investigation</option>
-        </select>
-        <div id="serviceDetail4"></div>
-      </div>
-
-      <hr style="margin: 20px 0; border: 1px solid #4CAF50;">
-
-      <!-- Status การรับบริการ -->
-      <div class="service-block">
-        <h3>2.2 Status การรับบริการ</h3>
-        
-        <label for="serviceStatus">Status:</label>
-        <select id="serviceStatus" name="serviceStatus" onchange="onServiceStatusChange()">
-          <option value="">-- เลือก --</option>
-          <option value="off_case">Off case</option>
-          <option value="follow_up">ติดตามการรักษาอยู่ที่คลีนิคอาชีวเวชศาสตร์</option>
-          <option value="consult">ส่ง Consult</option>
-          <option value="consult_follow">ส่ง Consult และยังติดตามอยู่ที่คลีนิคอาชีวเวชศาสตร์</option>
-        </select><br>
-        
-        <div id="consultDeptSection" style="display:none; margin-top: 10px;">
-          <label for="consultDepartment">ส่ง Consult แผนก:</label>
-          <input type="text" id="consultDepartment" name="consultDepartment" placeholder="ระบุชื่อแผนก"><br>
+        <div class="header-bar">
+            <div>ผู้เล่น: <span id="display-name">-</span></div>
+            <div>คะแนน: <span id="display-score" class="score-text">0</span> ♻️</div>
         </div>
-        
-        <label for="serviceStatusNote">หมายเหตุ:</label>
-        <textarea id="serviceStatusNote" name="serviceStatusNote" rows="3"></textarea><br>
-      </div>
 
-      <div class="page-navigation">
-        <button type="button" class="btn btn-secondary" onclick="showPage(1)">← ย้อนกลับ</button>
-        <div>
-          <button type="button" class="btn btn-primary" onclick="saveData()">💾 บันทึกข้อมูล</button>
-          <button type="button" class="btn btn-warning" onclick="clearForm()">🔄 ล้างฟอร์ม</button>
+        <div class="board">
+            <div>
+                <div class="column-title" style="border-bottom: 5px solid var(--panel-easy);">
+                    🍀 Waste Rookie (1)
+                </div>
+                <div id="col-easy-panels"></div>
+            </div>
+
+            <div>
+                <div class="column-title" style="border-bottom: 5px solid var(--panel-med);">
+                    🌿 Waste Ranger (2)
+                </div>
+                <div id="col-med-panels"></div>
+            </div>
+
+            <div>
+                <div class="column-title" style="border-bottom: 5px solid var(--panel-hard);">
+                    🌲 Waste Master (3)
+                </div>
+                <div id="col-hard-panels"></div>
+            </div>
         </div>
-      </div>
     </div>
 
-    <!-- ========== หน้า 3: ค้นหาและ Export ========== -->
-    <div id="page3" class="page">
-      <h2>ค้นหาและ Export ข้อมูล</h2>
+    <div class="screen" id="screen-gameover">
+        <div class="login-box" style="border-color: #2e7d32; max-width: 580px;">
+            <h1 id="over-title" style="color: #ef4444; margin-top: 0;">จบการแข่งขัน!</h1>
 
-      <div class="search-section">
-        <label for="searchText">ค้นหา:</label>
-        <input type="text" id="searchText" placeholder="HN, ชื่อ, แผนก, Job..." oninput="renderSearchResult()"><br>
+            <img id="over-avatar" class="result-avatar" src="https://kantinands.github.io/EnviQuestion_game/1.png" alt="rank image">
 
-        <label for="filterService">กรองตามประเภทบริการ:</label>
-        <select id="filterService" onchange="renderSearchResult()">
-          <option value="">-- ทั้งหมด --</option>
-          <option value="occ_health">A. การตรวจสุขภาพทางอาชีวเวชศาสตร์</option>
-          <option value="pre_employment">B. Pre-employment</option>
-          <option value="pre_placement">C. Pre-placement</option>
-          <option value="periodic">D. Periodic health checkup</option>
-          <option value="rtw">E. Return to work</option>
-          <option value="pre_retirement">F. Pre-retirement</option>
-          <option value="occ_disease">G. การวินิจฉัยโรคจากงาน</option>
-          <option value="impairment">H. การประเมินสูญเสีย</option>
-          <option value="disease_investigation">I. Disease Investigation</option>
-        </select><br>
+            <div id="rank-info-wrapper">
+                <div id="rank-info" class="rank-box">
+                    <div class="rank-title">คุณคือ: Waste Rookie</div>
+                    <div class="rank-desc">มือใหม่สายคัดแยก เริ่มต้นพิชิตโลกสีเขียว</div>
+                </div>
+            </div>
 
-        <button type="button" class="btn btn-primary" onclick="exportToExcel()">📥 Export to Excel (Full Data)</button>
-        <button type="button" class="btn btn-secondary" onclick="reloadFromStorage()">🔄 โหลดข้อมูลใหม่</button>
-      </div>
+            <div id="score-section">
+                <h2 style="margin-bottom: 10px;">
+                    คะแนนรวมของคุณคือ
+                    <span id="final-score" class="score-text" style="font-size:3rem;">0</span>
+                </h2>
 
-      <h3>ผลการค้นหา</h3>
-      <table id="searchTable">
-        <thead>
-          <tr>
-            <th>HN</th>
-            <th>ชื่อ-สกุล</th>
-            <th>แผนก</th>
-            <th>Job Title</th>
-            <th>วันที่รับบริการ</th>
-            <th>บริการที่เลือก</th>
-            <th>จัดการ</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+                <div class="staff-note">
+                    โปรดแสดงหน้าจอนี้แก่เจ้าหน้าที่ประจำซุ้มเพื่อ Stamp การ์ดกิจกรรมและรับของที่ระลึก
+                </div>
 
-      <div class="page-navigation">
-        <button type="button" class="btn btn-secondary" onclick="showPage(2)">← ย้อนกลับ</button>
-        <div></div>
-      </div>
+                <p id="save-status" style="font-weight:bold; color: var(--accent-blue); margin-top:18px;">
+                    ระบบกำลังบันทึกคะแนน...
+                </p>
+            </div>
+
+            <button class="btn-start" id="action-btn" style="margin-top:20px; background:#5d4037;" onclick="location.reload()">
+                เล่นอีกครั้ง
+            </button>
+        </div>
     </div>
 
-  </form>
-</div>
+    <div class="modal" id="quiz-modal">
+        <div class="modal-content">
+            <h3 id="modal-level-text" style="color: var(--accent-blue); margin-top:0; font-size:1.1rem;"></h3>
 
-<!-- Hidden table for full export -->
-<table id="fullExportTable" style="display:none;">
-  <thead>
-    <tr>
-      <th>HN</th>
-      <th>ชื่อ-สกุล</th>
-      <th>แผนก</th>
-      <th>Job Title</th>
-      <th>Job Task</th>
-      <th>วันที่รับบริการ</th>
-      <th>รูปแบบการมาที่คลีนิค</th>
-      
-      <!-- บริการที่ 1 -->
-      <th>ประเภทบริการที่ 1</th>
-      <th>ผลการตรวจสายตา (1)</th>
-      <th>FEV1 (1)</th>
-      <th>FVC (1)</th>
-      <th>FEV1/FVC (1)</th>
-      <th>แปลผลปอด (1)</th>
-      <th>หูซ้าย 250Hz (1)</th>
-      <th>หูซ้าย 500Hz (1)</th>
-      <th>หูซ้าย 1000Hz (1)</th>
-      <th>หูซ้าย 2000Hz (1)</th>
-      <th>หูซ้าย 4000Hz (1)</th>
-      <th>หูซ้าย 6000Hz (1)</th>
-      <th>หูซ้าย 8000Hz (1)</th>
-      <th>หูขวา 250Hz (1)</th>
-      <th>หูขวา 500Hz (1)</th>
-      <th>หูขวา 1000Hz (1)</th>
-      <th>หูขวา 2000Hz (1)</th>
-      <th>หูขวา 4000Hz (1)</th>
-      <th>หูขวา 6000Hz (1)</th>
-      <th>หูขวา 8000Hz (1)</th>
-      <th>แปลผลการได้ยินครั้งนี้ (1)</th>
-      <th>แปลผลเทียบ Baseline (1)</th>
-      <th>ประวัติเคส RTW (1)</th>
-      <th>ระบบที่ประเมิน RTW (1)</th>
-      <th>ผล RTW (1)</th>
-      <th>ประเภทโรค Occ Disease (1)</th>
-      <th>Management (1)</th>
-      <th>รายละเอียดเคส Disease Inv (1)</th>
-      <th>รายละเอียดการสอบสวน (1)</th>
-      <th>สรุปผลการสอบสวน (1)</th>
-      <th>หมายเหตุบริการที่ 1</th>
-      
-      <!-- บริการที่ 2 -->
-      <th>ประเภทบริการที่ 2</th>
-      <th>ผลการตรวจสายตา (2)</th>
-      <th>FEV1 (2)</th>
-      <th>FVC (2)</th>
-      <th>FEV1/FVC (2)</th>
-      <th>แปลผลปอด (2)</th>
-      <th>หูซ้าย 250Hz (2)</th>
-      <th>หูซ้าย 500Hz (2)</th>
-      <th>หูซ้าย 1000Hz (2)</th>
-      <th>หูซ้าย 2000Hz (2)</th>
-      <th>หูซ้าย 4000Hz (2)</th>
-      <th>หูซ้าย 6000Hz (2)</th>
-      <th>หูซ้าย 8000Hz (2)</th>
-      <th>หูขวา 250Hz (2)</th>
-      <th>หูขวา 500Hz (2)</th>
-      <th>หูขวา 1000Hz (2)</th>
-      <th>หูขวา 2000Hz (2)</th>
-      <th>หูขวา 4000Hz (2)</th>
-      <th>หูขวา 6000Hz (2)</th>
-      <th>หูขวา 8000Hz (2)</th>
-      <th>แปลผลการได้ยินครั้งนี้ (2)</th>
-      <th>แปลผลเทียบ Baseline (2)</th>
-      <th>ประวัติเคส RTW (2)</th>
-      <th>ระบบที่ประเมิน RTW (2)</th>
-      <th>ผล RTW (2)</th>
-      <th>ประเภทโรค Occ Disease (2)</th>
-      <th>Management (2)</th>
-      <th>รายละเอียดเคส Disease Inv (2)</th>
-      <th>รายละเอียดการสอบสวน (2)</th>
-      <th>สรุปผลการสอบสวน (2)</th>
-      <th>หมายเหตุบริการที่ 2</th>
-      
-      <!-- บริการที่ 3 -->
-      <th>ประเภทบริการที่ 3</th>
-      <th>ผลการตรวจสายตา (3)</th>
-      <th>FEV1 (3)</th>
-      <th>FVC (3)</th>
-      <th>FEV1/FVC (3)</th>
-      <th>แปลผลปอด (3)</th>
-      <th>หูซ้าย 250Hz (3)</th>
-      <th>หูซ้าย 500Hz (3)</th>
-      <th>หูซ้าย 1000Hz (3)</th>
-      <th>หูซ้าย 2000Hz (3)</th>
-      <th>หูซ้าย 4000Hz (3)</th>
-      <th>หูซ้าย 6000Hz (3)</th>
-      <th>หูซ้าย 8000Hz (3)</th>
-      <th>หูขวา 250Hz (3)</th>
-      <th>หูขวา 500Hz (3)</th>
-      <th>หูขวา 1000Hz (3)</th>
-      <th>หูขวา 2000Hz (3)</th>
-      <th>หูขวา 4000Hz (3)</th>
-      <th>หูขวา 6000Hz (3)</th>
-      <th>หูขวา 8000Hz (3)</th>
-      <th>แปลผลการได้ยินครั้งนี้ (3)</th>
-      <th>แปลผลเทียบ Baseline (3)</th>
-      <th>ประวัติเคส RTW (3)</th>
-      <th>ระบบที่ประเมิน RTW (3)</th>
-      <th>ผล RTW (3)</th>
-      <th>ประเภทโรค Occ Disease (3)</th>
-      <th>Management (3)</th>
-      <th>รายละเอียดเคส Disease Inv (3)</th>
-      <th>รายละเอียดการสอบสวน (3)</th>
-      <th>สรุปผลการสอบสวน (3)</th>
-      <th>หมายเหตุบริการที่ 3</th>
-      
-      <!-- บริการที่ 4 -->
-      <th>ประเภทบริการที่ 4</th>
-      <th>ผลการตรวจสายตา (4)</th>
-      <th>FEV1 (4)</th>
-      <th>FVC (4)</th>
-      <th>FEV1/FVC (4)</th>
-      <th>แปลผลปอด (4)</th>
-      <th>หูซ้าย 250Hz (4)</th>
-      <th>หูซ้าย 500Hz (4)</th>
-      <th>หูซ้าย 1000Hz (4)</th>
-      <th>หูซ้าย 2000Hz (4)</th>
-      <th>หูซ้าย 4000Hz (4)</th>
-      <th>หูซ้าย 6000Hz (4)</th>
-      <th>หูซ้าย 8000Hz (4)</th>
-      <th>หูขวา 250Hz (4)</th>
-      <th>หูขวา 500Hz (4)</th>
-      <th>หูขวา 1000Hz (4)</th>
-      <th>หูขวา 2000Hz (4)</th>
-      <th>หูขวา 4000Hz (4)</th>
-      <th>หูขวา 6000Hz (4)</th>
-      <th>หูขวา 8000Hz (4)</th>
-      <th>แปลผลการได้ยินครั้งนี้ (4)</th>
-      <th>แปลผลเทียบ Baseline (4)</th>
-      <th>ประวัติเคส RTW (4)</th>
-      <th>ระบบที่ประเมิน RTW (4)</th>
-      <th>ผล RTW (4)</th>
-      <th>ประเภทโรค Occ Disease (4)</th>
-      <th>Management (4)</th>
-      <th>รายละเอียดเคส Disease Inv (4)</th>
-      <th>รายละเอียดการสอบสวน (4)</th>
-      <th>สรุปผลการสอบสวน (4)</th>
-      <th>หมายเหตุบริการที่ 4</th>
-      
-      <th>Status การรับบริการ</th>
-      <th>Consult แผนก</th>
-      <th>หมายเหตุ Status</th>
-      <th>วันที่บันทึก</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+            <div class="timer-box">
+                <span id="timer">⏱️ 30 วิ</span>
+            </div>
 
-<script>
-  const STORAGE_KEY = 'occmedData';
-  let currentPage = 1;
-
-  function loadAll() {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  }
-
-  function saveAll(arr) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
-  }
-
-  // แสดง/ซ่อนช่อง Consult แผนก ตาม Status
-  function onServiceStatusChange() {
-    const status = document.getElementById('serviceStatus').value;
-    const consultSection = document.getElementById('consultDeptSection');
-    
-    if (status === 'consult' || status === 'consult_follow') {
-      consultSection.style.display = 'block';
-    } else {
-      consultSection.style.display = 'none';
-      document.getElementById('consultDepartment').value = '';
-    }
-  }
-
-  // แสดง/ซ่อนหน้า
-  function showPage(pageNum) {
-    // ซ่อนทุกหน้า
-    for (let i = 1; i <= 3; i++) {
-      document.getElementById('page' + i).classList.remove('active');
-    }
-    
-    // ซ่อนทุก tab
-    const tabs = document.querySelectorAll('.nav-tab');
-    tabs.forEach(tab => tab.classList.remove('active'));
-    
-    // แสดงหน้าที่เลือก
-    document.getElementById('page' + pageNum).classList.add('active');
-    tabs[pageNum - 1].classList.add('active');
-    
-    currentPage = pageNum;
-    
-    // ถ้าเป็นหน้า 3 ให้รีเฟรชข้อมูล
-    if (pageNum === 3) {
-      renderSearchResult();
-    }
-  }
-
-  // ฟังก์ชันสร้าง HTML สำหรับแต่ละประเภทบริการ
-  function onServiceTypeChange(idx) {
-    const select = document.getElementById('serviceType' + idx);
-    const val = select.value;
-    const container = document.getElementById('serviceDetail' + idx);
-    let html = '';
-
-    if (val === 'occ_health') {
-      // A. การตรวจสุขภาพทางอาชีวเวชศาสตร์
-      html = `
-        <div class="sub-section">
-          <h4>ตรวจสมรรถภาพการมองเห็น</h4>
-          <label>ผลการตรวจ:</label>
-          <textarea name="vision_result_${idx}" rows="2"></textarea><br>
+            <div class="question-text" id="q-text"></div>
+            <div class="options-grid" id="q-options"></div>
         </div>
+    </div>
 
-        <div class="sub-section">
-          <h4>ตรวจสมรรถภาพปอด</h4>
-          <label>FEV1:</label>
-          <input type="text" name="lung_fev1_${idx}"><br>
-          
-          <label>FVC:</label>
-          <input type="text" name="lung_fvc_${idx}"><br>
-          
-          <label>FEV1/FVC:</label>
-          <input type="text" name="lung_fev1_fvc_${idx}"><br>
-          
-          <label>แปลผล:</label>
-          <textarea name="lung_interpretation_${idx}" rows="2"></textarea><br>
-        </div>
+    <script>
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzAay58e5Gbl2SX5QBRY_QICUQHQd6DPbxSLpd3cQOii1xMBTdee-I4Fm54P-2hXF_bUg/exec";
+        const IMAGE_BASE = "https://kantinands.github.io/EnviQuestion_game/";
 
-        <div class="sub-section">
-          <h4>ตรวจสมรรถภาพการได้ยิน</h4>
-          
-          <div class="hearing-grid">
-            <div class="hearing-header">ความถี่ (Hz)</div>
-            <div class="hearing-header">250</div>
-            <div class="hearing-header">500</div>
-            <div class="hearing-header">1000</div>
-            <div class="hearing-header">2000</div>
-            <div class="hearing-header">4000</div>
-            <div class="hearing-header">6000</div>
-            <div class="hearing-header">8000</div>
-            
-            <div class="hearing-header">หูซ้าย (dB)</div>
-            <div><input type="number" name="hear_left_250_${idx}" style="width:70px;"></div>
-            <div><input type="number" name="hear_left_500_${idx}" style="width:70px;"></div>
-            <div><input type="number" name="hear_left_1000_${idx}" style="width:70px;"></div>
-            <div><input type="number" name="hear_left_2000_${idx}" style="width:70px;"></div>
-            <div><input type="number" name="hear_left_4000_${idx}" style="width:70px;"></div>
-            <div><input type="number" name="hear_left_6000_${idx}" style="width:70px;"></div>
-            <div><input type="number" name="hear_left_8000_${idx}" style="width:70px;"></div>
-            
-            <div class="hearing-header">หูขวา (dB)</div>
-            <div><input type="number" name="hear_right_250_${idx}" style="width:70px;"></div>
-            <div><input type="number" name="hear_right_500_${idx}" style="width:70px;"></div>
-            <div><input type="number" name="hear_right_1000_${idx}" style="width:70px;"></div>
-            <div><input type="number" name="hear_right_2000_${idx}" style="width:70px;"></div>
-            <div><input type="number" name="hear_right_4000_${idx}" style="width:70px;"></div>
-            <div><input type="number" name="hear_right_6000_${idx}" style="width:70px;"></div>
-            <div><input type="number" name="hear_right_8000_${idx}" style="width:70px;"></div>
-          </div>
-          
-          <label>แปลผลในครั้งนี้:</label>
-          <textarea name="hear_interpretation_current_${idx}" rows="2"></textarea><br>
-          
-          <label>แปลผลเมื่อเทียบกับ baseline:</label>
-          <textarea name="hear_interpretation_baseline_${idx}" rows="2"></textarea><br>
-        </div>
-      `;
-    } else if (val === 'pre_employment') {
-      html = `
-        <label>หมายเหตุ:</label>
-        <textarea name="preemployment_note_${idx}" rows="3"></textarea><br>
-      `;
-    } else if (val === 'pre_placement') {
-      html = `
-        <label>หมายเหตุ:</label>
-        <textarea name="preplacement_note_${idx}" rows="3"></textarea><br>
-      `;
-    } else if (val === 'periodic') {
-      html = `
-        <label>หมายเหตุ:</label>
-        <textarea name="periodic_note_${idx}" rows="3"></textarea><br>
-      `;
-    } else if (val === 'rtw') {
-      html = `
-        <div class="sub-section">
-          <label>ประวัติเคสโดยย่อ:</label>
-          <textarea name="rtw_history_${idx}" rows="3" placeholder="บันทึกประวัติโดยย่อ..."></textarea><br>
-          
-          <label>ระบบที่เข้ารับการประเมิน:</label>
-          <div style="margin-left: 210px; margin-bottom: 10px;">
-            <label style="width: auto; display: inline-block; margin-right: 15px;">
-              <input type="checkbox" name="rtw_system_cardiovascular_${idx}" value="1"> ระบบหัวใจและหลอดเลือด
-            </label>
-            <label style="width: auto; display: inline-block; margin-right: 15px;">
-              <input type="checkbox" name="rtw_system_respiratory_${idx}" value="1"> ระบบทางเดินหายใจ
-            </label><br>
-            <label style="width: auto; display: inline-block; margin-right: 15px;">
-              <input type="checkbox" name="rtw_system_digestive_${idx}" value="1"> ระบบทางเดินอาหาร
-            </label>
-            <label style="width: auto; display: inline-block; margin-right: 15px;">
-              <input type="checkbox" name="rtw_system_nervous_${idx}" value="1"> ระบบประสาท
-            </label><br>
-            <label style="width: auto; display: inline-block; margin-right: 15px;">
-              <input type="checkbox" name="rtw_system_musculoskeletal_${idx}" value="1"> ระบบกล้ามเนื้อและกระดูก
-            </label>
-            <label style="width: auto; display: inline-block; margin-right: 15px;">
-              <input type="checkbox" name="rtw_system_endocrine_${idx}" value="1"> ระบบต่อมไร้ท่อ
-            </label><br>
-            <label style="width: auto; display: inline-block; margin-right: 15px;">
-              <input type="checkbox" name="rtw_system_urinary_${idx}" value="1"> ระบบทางเดินปัสสาวะ
-            </label>
-            <label style="width: auto; display: inline-block; margin-right: 15px;">
-              <input type="checkbox" name="rtw_system_reproductive_${idx}" value="1"> ระบบสืบพันธุ์
-            </label><br>
-            <label style="width: auto; display: inline-block; margin-right: 15px;">
-              <input type="checkbox" name="rtw_system_skin_${idx}" value="1"> ระบบผิวหนัง
-            </label>
-            <label style="width: auto; display: inline-block; margin-right: 15px;">
-              <input type="checkbox" name="rtw_system_eye_${idx}" value="1"> ระบบตา
-            </label><br>
-            <label style="width: auto; display: inline-block; margin-right: 15px;">
-              <input type="checkbox" name="rtw_system_ear_${idx}" value="1"> ระบบหู คอ จมูก
-            </label>
-            <label style="width: auto; display: inline-block; margin-right: 15px;">
-              <input type="checkbox" name="rtw_system_mental_${idx}" value="1"> สุขภาพจิต
-            </label><br>
-            <label style="width: auto; display: inline-block; margin-right: 15px;">
-              <input type="checkbox" name="rtw_system_hematology_${idx}" value="1"> ระบบโลหิตวิทยา
-            </label>
-            <label style="width: auto; display: inline-block; margin-right: 15px;">
-              <input type="checkbox" name="rtw_system_immune_${idx}" value="1"> ระบบภูมิคุ้มกัน
-            </label><br>
-            <label style="width: auto; display: inline-block; margin-right: 15px;">
-              <input type="checkbox" name="rtw_system_other_${idx}" value="1"> อื่นๆ
-            </label>
-            <input type="text" name="rtw_system_other_text_${idx}" placeholder="ระบุ..." style="width: 200px; margin-left: 5px;">
-          </div>
-          
-          <label>ผลการตรวจ:</label>
-          <select name="rtw_result_${idx}">
-            <option value="">-- เลือก --</option>
-            <option value="fit">Fit</option>
-            <option value="fit_restriction">Fit with restriction</option>
-            <option value="unfit">Unfit</option>
-          </select><br>
-          
-          <label>หมายเหตุ:</label>
-          <textarea name="rtw_note_${idx}" rows="3"></textarea><br>
-        </div>
-      `;
-    } else if (val === 'pre_retirement') {
-      html = `
-        <label>หมายเหตุ:</label>
-        <textarea name="preretirement_note_${idx}" rows="3"></textarea><br>
-      `;
-    } else if (val === 'occ_disease') {
-      html = `
-        <div class="sub-section">
-          <label>ประเภทโรค:</label>
-          <select name="occdisease_type_${idx}">
-            <option value="">-- เลือก --</option>
-            <option value="occupational">Occupational disease (โรคจากการประกอบอาชีพ)</option>
-            <option value="work_related">Work-related disease (โรคเนื่องจากงาน)</option>
-            <option value="non_occupational">Non-occupational and work-related disease (ไม่เกี่ยว้องจากการทำงาน)</option>
-          </select><br>
-          
-          <label>Management (โดยย่อ):</label>
-          <textarea name="occdisease_management_${idx}" rows="3"></textarea><br>
-          
-          <label>หมายเหตุ:</label>
-          <textarea name="occdisease_note_${idx}" rows="3"></textarea><br>
-        </div>
-      `;
-    } else if (val === 'impairment') {
-      html = `
-        <label>หมายเหตุ:</label>
-        <textarea name="impairment_note_${idx}" rows="3"></textarea><br>
-      `;
-    } else if (val === 'disease_investigation') {
-      // I. Disease Investigation
-      html = `
-        <div class="sub-section">
-          <label>รายละเอียดเคส:</label>
-          <textarea name="disease_inv_case_${idx}" rows="4" placeholder="บันทึกรายละเอียดของเคส..."></textarea><br>
-          
-          <label>รายละเอียดการสอบสวน:</label>
-          <textarea name="disease_inv_investigation_${idx}" rows="4" placeholder="บันทึกรายละเอียดการสอบสวน..."></textarea><br>
-          
-          <label>สรุปผลการสอบสวน:</label>
-          <textarea name="disease_inv_summary_${idx}" rows="4" placeholder="บันทึกสรุปผลการสอบสวน..."></textarea><br>
-        </div>
-      `;
-    }
+        let questionsData = {};
+        let playerName = "";
+        let currentScore = 0;
+        let currentActiveQuestion = null;
+        let currentPanelId = null;
 
-    container.innerHTML = html;
-  }
+        const QUESTION_TIME = 30;
+        let timeLeft = QUESTION_TIME;
+        let timerInterval = null;
+        let questionLocked = false;
 
-  // รวบรวมข้อมูลจากแต่ละบริการ
-  function collectServiceDetail(idx) {
-    const select = document.getElementById('serviceType' + idx);
-    const typeVal = select.value || '';
-    if (!typeVal) return null;
-    
-    const container = document.getElementById('serviceDetail' + idx);
-    const inputs = container.querySelectorAll('input, textarea, select');
-    const detail = { type: typeVal, fields: {} };
-    
-    inputs.forEach(el => {
-      detail.fields[el.name] = el.value;
-    });
-    
-    return detail;
-  }
+        window.onload = () => {
+            fetch(WEB_APP_URL)
+                .then(res => res.json())
+                .then(data => {
+                    questionsData = data;
+                    document.getElementById('loading').style.display = 'none';
+                })
+                .catch(err => {
+                    console.error("Error loading questions:", err);
+                    document.getElementById('loading').innerText = "❌ ไม่สามารถโหลดข้อมูลได้ กรุณาลองใหม่";
+                });
+        };
 
-  // เติมข้อมูลกลับเข้าฟอร์ม
-  function fillServiceDetail(idx, detail) {
-    const select = document.getElementById('serviceType' + idx);
-    if (!detail || !detail.type) {
-      select.value = '';
-      document.getElementById('serviceDetail' + idx).innerHTML = '';
-      return;
-    }
-    
-    select.value = detail.type;
-    onServiceTypeChange(idx);
-    
-    const container = document.getElementById('serviceDetail' + idx);
-    const inputs = container.querySelectorAll('input, textarea, select');
-    
-    inputs.forEach(el => {
-      if (detail.fields && el.name in detail.fields) {
-        el.value = detail.fields[el.name];
-      }
-    });
-  }
+        function startGame() {
+            const name = document.getElementById('player-name').value.trim();
 
-  // บันทึกข้อมูล
-  function saveData() {
-    const arr = loadAll();
-    const hn = document.getElementById('hn').value.trim();
-    if (!hn) { 
-      alert('กรุณากรอก HN'); 
-      showPage(1);
-      return; 
-    }
+            if (!name) {
+                alert('กรุณากรอกชื่อก่อนครับ!');
+                return;
+            }
 
-    const data = {
-      hn,
-      patientName: document.getElementById('patientName').value,
-      department: document.getElementById('department').value,
-      jobTitle: document.getElementById('jobTitle').value,
-      jobTask: document.getElementById('jobTask').value,
-      visitDate: document.getElementById('visitDate').value,
-      visitType: document.getElementById('visitType').value,
+            playerName = name;
 
-      serviceDetail1: collectServiceDetail(1),
-      serviceDetail2: collectServiceDetail(2),
-      serviceDetail3: collectServiceDetail(3),
-      serviceDetail4: collectServiceDetail(4),
+            document.getElementById('display-name').innerText = playerName;
+            document.getElementById('screen-login').classList.remove('active');
+            document.getElementById('screen-game').classList.add('active');
 
-      serviceStatus: document.getElementById('serviceStatus').value,
-      consultDepartment: document.getElementById('consultDepartment').value,
-      serviceStatusNote: document.getElementById('serviceStatusNote').value,
-
-      updatedAt: new Date().toISOString()
-    };
-
-    const idx = arr.findIndex(x => x.hn === hn);
-    if (idx >= 0) {
-      arr[idx] = data;
-    } else {
-      arr.push(data);
-    }
-    
-    saveAll(arr);
-    alert('บันทึกเรียบร้อย');
-    showPage(3);
-  }
-
-  // ล้างฟอร์ม
-  function clearForm() {
-    if (!confirm('ยืนยันล้างฟอร์ม?')) return;
-    document.getElementById('occmedForm').reset();
-    for (let i = 1; i <= 4; i++) {
-      document.getElementById('serviceDetail' + i).innerHTML = '';
-    }
-  }
-
-  // ลบข้อมูลทั้งหมด
-  function clearAllData() {
-    if (!confirm('ยืนยันลบข้อมูลทั้งหมด? การกระทำนี้ไม่สามารถย้อนกลับได้!')) return;
-    saveAll([]);
-    renderSearchResult();
-    alert('ลบข้อมูลทั้งหมดเรียบร้อย');
-  }
-
-  // แสดงผลการค้นหา (แบบย่อ)
-  function renderSearchResult() {
-    const arr = loadAll();
-    const text = document.getElementById('searchText').value.toLowerCase();
-    const filter = document.getElementById('filterService').value;
-    const tbody = document.querySelector('#searchTable tbody');
-    tbody.innerHTML = '';
-
-    let filteredData = arr.filter(item => {
-      let match = true;
-      
-      // กรองตามประเภทบริการ
-      if (filter) {
-        let hasService = false;
-        for (let i = 1; i <= 4; i++) {
-          const detail = item['serviceDetail' + i];
-          if (detail && detail.type === filter) {
-            hasService = true;
-            break;
-          }
+            buildBoard();
         }
-        if (!hasService) match = false;
-      }
-      
-      // ค้นหาตามข้อความ
-      if (text && match) {
-        const allText = [
-          item.hn,
-          item.patientName,
-          item.department,
-          item.jobTitle,
-          item.jobTask
-        ].join(' ').toLowerCase();
-        
-        if (!allText.includes(text)) match = false;
-      }
-      
-      return match;
-    });
 
-    filteredData.forEach(item => {
-      const services = [];
-      for (let i = 1; i <= 4; i++) {
-        const detail = item['serviceDetail' + i];
-        if (detail && detail.type) {
-          const serviceName = getServiceName(detail.type);
-          services.push(serviceName);
+        function buildBoard() {
+            const levels = [
+                { key: 'ง่าย', id: 'col-easy-panels', css: 'easy', pts: 1 },
+                { key: 'กลาง', id: 'col-med-panels', css: 'med', pts: 2 },
+                { key: 'ยาก', id: 'col-hard-panels', css: 'hard', pts: 3 }
+            ];
+
+            levels.forEach(lvl => {
+                const container = document.getElementById(lvl.id);
+                container.innerHTML = '';
+
+                const qList = questionsData[lvl.key] || [];
+
+                qList.forEach((q, i) => {
+                    const btn = document.createElement('div');
+
+                    btn.className = `panel ${lvl.css}`;
+                    btn.id = `panel-${lvl.key}-${i}`;
+                    btn.innerText = i + 1;
+                    btn.onclick = () => openQuestion(lvl.key, i, btn.id, lvl.pts);
+
+                    container.appendChild(btn);
+                });
+            });
         }
-      }
 
-      // แปลงวันที่เป็นรูปแบบไทย
-      let visitDateThai = '';
-      if (item.visitDate) {
-        const date = new Date(item.visitDate);
-        visitDateThai = date.toLocaleDateString('th-TH', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric'
-        });
-      }
+        function startTimer() {
+            stopTimer();
 
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${item.hn}</td>
-        <td>${item.patientName || ''}</td>
-        <td>${item.department || ''}</td>
-        <td>${item.jobTitle || ''}</td>
-        <td>${visitDateThai}</td>
-        <td>${services.join(', ')}</td>
-        <td>
-          <button type="button" class="btn btn-small btn-secondary" onclick="loadToForm('${item.hn}')">✏️ แก้ไข</button>
-          <button type="button" class="btn btn-small btn-danger" onclick="deleteRecord('${item.hn}')">🗑️ ลบ</button>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
-  }
+            timeLeft = QUESTION_TIME;
+            questionLocked = false;
 
-  // โหลดข้อมูลเข้าฟอร์ม
-  function loadToForm(hn) {
-    const arr = loadAll();
-    const item = arr.find(x => x.hn === hn);
-    if (!item) return;
-    
-    clearFormSilent();
+            updateTimerDisplay();
 
-    document.getElementById('hn').value = item.hn || '';
-    document.getElementById('patientName').value = item.patientName || '';
-    document.getElementById('department').value = item.department || '';
-    document.getElementById('jobTitle').value = item.jobTitle || '';
-    document.getElementById('jobTask').value = item.jobTask || '';
-    document.getElementById('visitDate').value = item.visitDate || '';
-    document.getElementById('visitType').value = item.visitType || '';
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
 
-    fillServiceDetail(1, item.serviceDetail1);
-    fillServiceDetail(2, item.serviceDetail2);
-    fillServiceDetail(3, item.serviceDetail3);
-    fillServiceDetail(4, item.serviceDetail4);
-
-    document.getElementById('serviceStatus').value = item.serviceStatus || '';
-    document.getElementById('consultDepartment').value = item.consultDepartment || '';
-    document.getElementById('serviceStatusNote').value = item.serviceStatusNote || '';
-    
-    // แสดง/ซ่อนช่อง Consult แผนก
-    onServiceStatusChange();
-    
-    showPage(1);
-  }
-
-  // ล้างฟอร์มแบบไม่ถาม
-  function clearFormSilent() {
-    document.getElementById('occmedForm').reset();
-    for (let i = 1; i <= 4; i++) {
-      document.getElementById('serviceDetail' + i).innerHTML = '';
-    }
-  }
-
-  // ลบ record เดียว
-  function deleteRecord(hn) {
-    if (!confirm(`ยืนยันลบข้อมูลของ HN: ${hn}?`)) return;
-    
-    const arr = loadAll();
-    const newArr = arr.filter(x => x.hn !== hn);
-    saveAll(newArr);
-    renderSearchResult();
-    alert('ลบข้อมูลเรียบร้อย');
-  }
-
-  // แปลงชื่อประเภทบริการ
-  function getServiceName(type) {
-    const names = {
-      'occ_health': 'A. การตรวจสุขภาพฯ',
-      'pre_employment': 'B. Pre-employment',
-      'pre_placement': 'C. Pre-placement',
-      'periodic': 'D. Periodic',
-      'rtw': 'E. Return to work',
-      'pre_retirement': 'F. Pre-retirement',
-      'occ_disease': 'G. วินิจฉัยโรคฯ',
-      'impairment': 'H. ประเมินสูญเสีย',
-      'disease_investigation': 'I. Disease Investigation'
-    };
-    return names[type] || type;
-  }
-
-  // สร้างรายละเอียดบริการสำหรับ export (แบบเก่า - ไม่ใช้แล้ว)
-  function getServiceDetailText(detail) {
-    if (!detail || !detail.type) return '';
-    
-    let text = '';
-    const fields = detail.fields || {};
-    
-    for (let key in fields) {
-      if (fields[key]) {
-        text += `${key}: ${fields[key]}; `;
-      }
-    }
-    
-    return text;
-  }
-
-  // ดึงค่าจาก fields ของ service detail
-  function getFieldValue(detail, fieldName) {
-    if (!detail || !detail.fields) return '';
-    return detail.fields[fieldName] || '';
-  }
-
-  // ดึงระบบที่ประเมินสำหรับ RTW
-  function getRTWSystems(detail) {
-    if (!detail || !detail.fields) return '';
-    
-    const systems = [];
-    const systemNames = {
-      'rtw_system_cardiovascular': 'หัวใจและหลอดเลือด',
-      'rtw_system_respiratory': 'ทางเดินหายใจ',
-      'rtw_system_digestive': 'ทางเดินอาหาร',
-      'rtw_system_nervous': 'ประสาท',
-      'rtw_system_musculoskeletal': 'กล้ามเนื้อและกระดูก',
-      'rtw_system_endocrine': 'ต่อมไร้ท่อ',
-      'rtw_system_urinary': 'ทางเดินปัสสาวะ',
-      'rtw_system_reproductive': 'สืบพันธุ์',
-      'rtw_system_skin': 'ผิวหนัง',
-      'rtw_system_eye': 'ตา',
-      'rtw_system_ear': 'หู คอ จมูก',
-      'rtw_system_mental': 'สุขภาพจิต',
-      'rtw_system_hematology': 'โลหิตวิทยา',
-      'rtw_system_immune': 'ภูมิคุ้มกัน',
-      'rtw_system_other': 'อื่นๆ'
-    };
-    
-    for (let key in detail.fields) {
-      if (key.includes('rtw_system_') && detail.fields[key] === '1') {
-        const systemKey = key.replace(/_\d+$/, ''); // ลบตัวเลขท้าย
-        if (systemNames[systemKey]) {
-          systems.push(systemNames[systemKey]);
+                if (timeLeft <= 0) {
+                    stopTimer();
+                    timeOut();
+                }
+            }, 1000);
         }
-      }
-    }
-    
-    // เพิ่ม "อื่นๆ" ถ้ามี
-    const otherText = getFieldValue(detail, detail.fields['rtw_system_other_text_1'] ? 'rtw_system_other_text_1' : 
-                                               detail.fields['rtw_system_other_text_2'] ? 'rtw_system_other_text_2' :
-                                               detail.fields['rtw_system_other_text_3'] ? 'rtw_system_other_text_3' :
-                                               detail.fields['rtw_system_other_text_4'] ? 'rtw_system_other_text_4' : '');
-    if (otherText) {
-      const otherIndex = systems.indexOf('อื่นๆ');
-      if (otherIndex > -1) {
-        systems[otherIndex] = `อื่นๆ (${otherText})`;
-      }
-    }
-    
-    return systems.join(', ');
-  }
 
-  // แปลงประเภทโรค Occ Disease
-  function getOccDiseaseType(typeCode) {
-    const types = {
-      'occupational': 'Occupational disease (โรคจากการประกอบอาชีพ)',
-      'work_related': 'Work-related disease (โรคเนื่องจากงาน)',
-      'non_occupational': 'Non-occupational and work-related disease (ไม่เกี่ยวข้องจากการทำงาน)'
-    };
-    return types[typeCode] || typeCode || '';
-  }
-
-  // แปลงผล RTW
-  function getRTWResult(resultCode) {
-    const results = {
-      'fit': 'Fit',
-      'fit_restriction': 'Fit with restriction',
-      'unfit': 'Unfit'
-    };
-    return results[resultCode] || resultCode || '';
-  }
-
-  // Export to Excel (Full Data)
-  function exportToExcel() {
-    const arr = loadAll();
-    const text = document.getElementById('searchText').value.toLowerCase();
-    const filter = document.getElementById('filterService').value;
-    
-    // กรองข้อมูลตามเงื่อนไขเดียวกับตาราง
-    let filteredData = arr.filter(item => {
-      let match = true;
-      
-      if (filter) {
-        let hasService = false;
-        for (let i = 1; i <= 4; i++) {
-          const detail = item['serviceDetail' + i];
-          if (detail && detail.type === filter) {
-            hasService = true;
-            break;
-          }
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
         }
-        if (!hasService) match = false;
-      }
-      
-      if (text && match) {
-        const allText = [
-          item.hn,
-          item.patientName,
-          item.department,
-          item.jobTitle,
-          item.jobTask
-        ].join(' ').toLowerCase();
-        
-        if (!allText.includes(text)) match = false;
-      }
-      
-      return match;
-    });
 
-    // สร้างตาราง Full Data
-    const tbody = document.querySelector('#fullExportTable tbody');
-    tbody.innerHTML = '';
+        function updateTimerDisplay() {
+            const timerEl = document.getElementById('timer');
 
-    filteredData.forEach(item => {
-      const tr = document.createElement('tr');
-      
-      // แปลง visitType เป็นข้อความที่อ่านง่าย
-      const visitTypeText = {
-        'routine': 'ตรวจตามระบบ',
-        'consult_internal': 'รับ consult จากแผนกอื่น',
-        'consult_external': 'จากหน่วยงานภายนอกโรงพยาบาล',
-        'other': 'อื่นๆ'
-      };
-      
-      // แปลง serviceStatus เป็นข้อความที่อ่านง่าย
-      const statusText = {
-        'off_case': 'Off case',
-        'follow_up': 'ติดตามการรักษาอยู่ที่คลีนิคอาชีวเวชศาสตร์',
-        'consult': 'ส่ง Consult',
-        'consult_follow': 'ส่ง Consult และยังติดตามอยู่ที่คลีนิคอาชีวเวชศาสตร์'
-      };
-      
-      let cells = `
-        <td>${item.hn || ''}</td>
-        <td>${item.patientName || ''}</td>
-        <td>${item.department || ''}</td>
-        <td>${item.jobTitle || ''}</td>
-        <td>${item.jobTask || ''}</td>
-        <td>${item.visitDate || ''}</td>
-        <td>${visitTypeText[item.visitType] || item.visitType || ''}</td>
-      `;
-      
-      // เพิ่มข้อมูลบริการ 1-4 แบบแยกคอลัมน์
-      for (let i = 1; i <= 4; i++) {
-        const detail = item['serviceDetail' + i];
-        
-        if (detail && detail.type) {
-          // ประเภทบริการ
-          cells += `<td>${getServiceName(detail.type)}</td>`;
-          
-          // ข้อมูลการตรวจสุขภาพทางอาชีวเวชศาสตร์
-          cells += `<td>${getFieldValue(detail, 'vision_result_' + i)}</td>`;
-          cells += `<td>${getFieldValue(detail, 'lung_fev1_' + i)}</td>`;
-          cells += `<td>${getFieldValue(detail, 'lung_fvc_' + i)}</td>`;
-          cells += `<td>${getFieldValue(detail, 'lung_fev1_fvc_' + i)}</td>`;
-          cells += `<td>${getFieldValue(detail, 'lung_interpretation_' + i)}</td>`;
-          
-          // ข้อมูลการได้ยิน - หูซ้าย
-          cells += `<td>${getFieldValue(detail, 'hear_left_250_' + i)}</td>`;
-          cells += `<td>${getFieldValue(detail, 'hear_left_500_' + i)}</td>`;
-          cells += `<td>${getFieldValue(detail, 'hear_left_1000_' + i)}</td>`;
-          cells += `<td>${getFieldValue(detail, 'hear_left_2000_' + i)}</td>`;
-          cells += `<td>${getFieldValue(detail, 'hear_left_4000_' + i)}</td>`;
-          cells += `<td>${getFieldValue(detail, 'hear_left_6000_' + i)}</td>`;
-          cells += `<td>${getFieldValue(detail, 'hear_left_8000_' + i)}</td>`;
-          
-          // ข้อมูลการได้ยิน - หูขวา
-          cells += `<td>${getFieldValue(detail, 'hear_right_250_' + i)}</td>`;
-          cells += `<td>${getFieldValue(detail, 'hear_right_500_' + i)}</td>`;
-          cells += `<td>${getFieldValue(detail, 'hear_right_1000_' + i)}</td>`;
-          cells += `<td>${getFieldValue(detail, 'hear_right_2000_' + i)}</td>`;
-          cells += `<td>${getFieldValue(detail, 'hear_right_4000_' + i)}</td>`;
-          cells += `<td>${getFieldValue(detail, 'hear_right_6000_' + i)}</td>`;
-          cells += `<td>${getFieldValue(detail, 'hear_right_8000_' + i)}</td>`;
-          
-          // แปลผลการได้ยิน
-          cells += `<td>${getFieldValue(detail, 'hear_interpretation_current_' + i)}</td>`;
-          cells += `<td>${getFieldValue(detail, 'hear_interpretation_baseline_' + i)}</td>`;
-          
-          // ข้อมูล RTW
-          cells += `<td>${getFieldValue(detail, 'rtw_history_' + i)}</td>`;
-          cells += `<td>${getRTWSystems(detail)}</td>`;
-          cells += `<td>${getRTWResult(getFieldValue(detail, 'rtw_result_' + i))}</td>`;
-          
-          // ข้อมูล Occ Disease
-          cells += `<td>${getOccDiseaseType(getFieldValue(detail, 'occdisease_type_' + i))}</td>`;
-          cells += `<td>${getFieldValue(detail, 'occdisease_management_' + i)}</td>`;
-          
-          // ข้อมูล Disease Investigation
-          cells += `<td>${getFieldValue(detail, 'disease_inv_case_' + i)}</td>`;
-          cells += `<td>${getFieldValue(detail, 'disease_inv_investigation_' + i)}</td>`;
-          cells += `<td>${getFieldValue(detail, 'disease_inv_summary_' + i)}</td>`;
-          
-          // หมายเหตุ
-          let note = '';
-          note += getFieldValue(detail, 'preemployment_note_' + i);
-          note += getFieldValue(detail, 'preplacement_note_' + i);
-          note += getFieldValue(detail, 'periodic_note_' + i);
-          note += getFieldValue(detail, 'rtw_note_' + i);
-          note += getFieldValue(detail, 'preretirement_note_' + i);
-          note += getFieldValue(detail, 'occdisease_note_' + i);
-          note += getFieldValue(detail, 'impairment_note_' + i);
-          cells += `<td>${note}</td>`;
-          
-        } else {
-          // ถ้าไม่มีบริการ ให้ใส่ cell ว่างครบทุกคอลัมน์
-          for (let j = 0; j < 31; j++) {
-            cells += `<td></td>`;
-          }
+            if (!timerEl) return;
+
+            timerEl.innerText = `⏱️ ${timeLeft} วิ`;
+
+            if (timeLeft <= 10) {
+                timerEl.classList.add('warning');
+            } else {
+                timerEl.classList.remove('warning');
+            }
         }
-      }
-      
-      cells += `
-        <td>${statusText[item.serviceStatus] || item.serviceStatus || ''}</td>
-        <td>${item.consultDepartment || ''}</td>
-        <td>${item.serviceStatusNote || ''}</td>
-        <td>${item.updatedAt ? new Date(item.updatedAt).toLocaleString('th-TH') : ''}</td>
-      `;
-      
-      tr.innerHTML = cells;
-      tbody.appendChild(tr);
-    });
 
-    // Export
-    const table = document.getElementById('fullExportTable');
-    const html = table.outerHTML.replace(/ /g, '%20');
-    const a = document.createElement('a');
-    a.href = 'data:application/vnd.ms-excel,' + html;
-    a.download = 'occmed_fulldata_' + new Date().toISOString().slice(0,10) + '.xls';
-    a.click();
-  }
+        function timeOut() {
+            if (questionLocked) return;
 
-  // โหลดข้อมูลใหม่
-  function reloadFromStorage() {
-    renderSearchResult();
-    alert('โหลดข้อมูลใหม่เรียบร้อย');
-  }
+            questionLocked = true;
+            disableOptionButtons();
+            document.getElementById('quiz-modal').style.display = 'none';
 
-  // เริ่มต้นเมื่อโหลดหน้า
-  window.onload = function() {
-    showPage(1);
-  };
-</script>
+            alert("หมดเวลา! ถือว่าตอบผิด");
+            gameOver(false);
+        }
 
+        function openQuestion(level, idx, pId, points) {
+            const panel = document.getElementById(pId);
+
+            if (panel.classList.contains('disabled')) return;
+
+            currentActiveQuestion = {
+                data: questionsData[level][idx],
+                points: points
+            };
+
+            currentPanelId = pId;
+            questionLocked = false;
+
+            document.getElementById('modal-level-text').innerText = `ระดับ: ${level} (+${points} คะแนน)`;
+            document.getElementById('q-text').innerText = currentActiveQuestion.data.q;
+
+            const optDiv = document.getElementById('q-options');
+            optDiv.innerHTML = '';
+
+            currentActiveQuestion.data.options.forEach((opt, i) => {
+                const b = document.createElement('button');
+                b.className = 'opt-btn';
+                b.innerText = opt;
+                b.onclick = () => check(i);
+                optDiv.appendChild(b);
+            });
+
+            document.getElementById('quiz-modal').style.display = 'flex';
+            startTimer();
+        }
+
+        function disableOptionButtons() {
+            const buttons = document.querySelectorAll('.opt-btn');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+            });
+        }
+
+        function check(idx) {
+            if (questionLocked) return;
+
+            questionLocked = true;
+            stopTimer();
+            disableOptionButtons();
+            document.getElementById('quiz-modal').style.display = 'none';
+
+            if (idx === currentActiveQuestion.data.a) {
+                alert("เย้ ตอบถูกแล้ว!");
+
+                currentScore += currentActiveQuestion.points;
+
+                document.getElementById('display-score').innerText = currentScore;
+                document.getElementById(currentPanelId).classList.add('disabled');
+                document.getElementById(currentPanelId).innerText = "✔️";
+
+                const all = document.querySelectorAll('.panel');
+                const done = document.querySelectorAll('.panel.disabled');
+
+                if (all.length === done.length) {
+                    gameOver(true);
+                }
+            } else {
+                alert("ขอแสดงความเสียใจคุณตอบผิด");
+                gameOver(false);
+            }
+        }
+
+        function gameOver(isWin) {
+            stopTimer();
+
+            document.getElementById('quiz-modal').style.display = 'none';
+            document.getElementById('screen-game').classList.remove('active');
+            document.getElementById('screen-gameover').classList.add('active');
+            document.getElementById('final-score').innerText = currentScore;
+
+            let rankName = "";
+            let rankDesc = "";
+            let rankImage = IMAGE_BASE + "1.png";
+
+            if (currentScore <= 1) {
+                document.getElementById('over-title').innerText = "ภารกิจไม่สำเร็จ...ลองใหม่อีกครั้ง";
+                document.getElementById('over-title').style.color = "#ef4444";
+                document.getElementById('over-avatar').src = IMAGE_BASE + "4.png";
+                document.getElementById('rank-info-wrapper').style.display = "none";
+                document.getElementById('score-section').style.display = "none";
+
+                const btn = document.getElementById('action-btn');
+                btn.innerText = "เริ่มใหม่";
+                btn.onclick = () => location.reload();
+                return;
+            }
+
+            if (currentScore >= 2 && currentScore <= 10) {
+                rankName = "Waste Rookie";
+                rankDesc = "มือใหม่สายคัดแยก เริ่มต้นพิชิตโลกสีเขียว";
+                rankImage = IMAGE_BASE + "1.png";
+            } else if (currentScore >= 11 && currentScore <= 20) {
+                rankName = "Waste Ranger";
+                rankDesc = "สายรักษ์โลกตัวจริง รู้ลึกเรื่องการจัดการขยะ";
+                rankImage = IMAGE_BASE + "2.png";
+            } else if (currentScore >= 21 && currentScore <= 30) {
+                rankName = "Waste Master";
+                rankDesc = "สุดยอดแห่งการจัดการขยะ";
+                rankImage = IMAGE_BASE + "3.png";
+            } else {
+                rankName = "Waste Rookie";
+                rankDesc = "มือใหม่สายคัดแยก เริ่มต้นพิชิตโลกสีเขียว";
+                rankImage = IMAGE_BASE + "1.png";
+            }
+
+            document.getElementById('rank-info-wrapper').style.display = "block";
+            document.getElementById('score-section').style.display = "block";
+
+            const btn = document.getElementById('action-btn');
+            btn.innerText = "เล่นอีกครั้ง";
+            btn.onclick = () => location.reload();
+
+            if (isWin) {
+                document.getElementById('over-title').innerText = "ยินดีด้วย! คุณคือสุดยอดนักอนุรักษ์";
+                document.getElementById('over-title').style.color = "#2e7d32";
+            } else {
+                document.getElementById('over-title').innerText = "จบการแข่งขัน!";
+                document.getElementById('over-title').style.color = "#ef4444";
+            }
+
+            document.getElementById('over-avatar').src = rankImage;
+
+            document.getElementById('rank-info').innerHTML = `
+                <div class="rank-title">คุณคือ: ${rankName}</div>
+                <div class="rank-desc">${rankDesc}</div>
+            `;
+
+            fetch(WEB_APP_URL, {
+                method: "POST",
+                body: JSON.stringify({
+                    name: playerName,
+                    score: currentScore,
+                    rank: rankName
+                })
+            })
+            .then(res => res.json())
+            .then(res => {
+                if (res.success) {
+                    document.getElementById('save-status').innerText = "✅ บันทึกคะแนนสำเร็จแล้ว";
+                } else {
+                    document.getElementById('save-status').innerText = "❌ บันทึกคะแนนไม่สำเร็จ";
+                }
+            })
+            .catch(err => {
+                console.error("Save score error:", err);
+                document.getElementById('save-status').innerText = "❌ ติดปัญหาการเชื่อมต่อเซิร์ฟเวอร์";
+            });
+        }
+    </script>
 </body>
 </html>
